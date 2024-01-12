@@ -20,6 +20,10 @@ const MessagesArea = () => {
       <div className="message-area">
       <SendMessage/>
       <RecieveMessage/>
+      <SendMessage/>
+      <RecieveMessage/>
+
+
       </div>
       <div className="text-input-area">
       <input type="text" placeholder="Type your message..."/>
