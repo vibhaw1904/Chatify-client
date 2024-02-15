@@ -1,14 +1,23 @@
-import React from 'react'
+import React, { createContext, useState } from 'react'
 import ContactsSlide from './ContactsSlide'
-// import MessagesArea from './MessagesArea'
 import './temp.css'
-import Welcome from './Welcome'
+import { Outlet } from 'react-router-dom'
+import {  UseSelector,useDispatch } from 'react-redux'
+
+export const myContext=createContext();
 function Container() {
+  const dispatch=useDispatch();
+  const [refresh,setRefresh]=useState(true);
+
+
   return (
     <div className='main-container'>
-      <ContactsSlide/>
+      <myContext.Provider value={{refresh:refresh,setRefresh:setRefresh}}><ContactsSlide/>
+      <Outlet/></myContext.Provider>
+      
       {/* <MessagesArea/> */}
-      <Welcome/>
+      {/* <Welcome/> */}
+      {/* <UserGroups/> */}
     </div>
   )
 }

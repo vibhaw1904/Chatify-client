@@ -1,22 +1,41 @@
 import React, { useState } from 'react';
 import './Signup.css'
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { Backdrop,CircularProgress } from '@mui/material';
 const Signup = () => {
     const[username,setUsername]=useState('');
     const[email,setEmail]=useState('');
     const[password,setPassword]=useState('');
+    const[loading,setLoading]=useState(false)
 
-    const handleSubmit=(e)=>{
-      
+    const navigate=useNavigate();
+    const handleSubmit=async(e)=>{
+        setLoading(true)
+
+      e.preventDefault();
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+        try {
+        const res=await axios.post('http://localhost:5000/user/register',{username,email,password})
+        console.log(res.data)
+        localStorage.setItem('userData',JSON.stringify(res));
+        navigate('/')
+        } catch (error) {
+            console.log(error)
+        }
         
+        setLoading(false)
     }
 
-    return (
-        <form onSubmit={handleSubmit}>
+    return (<>
+     <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="secondary" />
+      </Backdrop>
+     <form onSubmit={handleSubmit}>
             <div className='input-field'>
-              
-                    
-                
                 <label htmlFor="name">Name:</label>
                 <input
                     type="text"
@@ -50,6 +69,9 @@ const Signup = () => {
                 <button type="">Signup</button>
             </div>
             </form>
+    
+    </>
+       
         
     )
 }

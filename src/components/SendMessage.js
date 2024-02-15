@@ -1,11 +1,10 @@
 import React from 'react'
 import './temp.css'
-const SendMessage = () => {
-    const props={name:"kittu",message:"hey kittu this side"}
+const SendMessage = ({props}) => {
   return (
     <div className='send-message-container'>
       <div className='messageBox'>
-        <p>{props.message}</p>
+        <p>{props.content}</p>
         <p className='send-timeStamp'>12:00 Am</p>
       </div>
     </div>
