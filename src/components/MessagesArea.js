@@ -21,7 +21,6 @@ const MessagesArea = () => {
   const [connectionStatus, setConnectionStatus] = useState(false);
 
   const socket = io("http://localhost:5000");
-
   useEffect(() => {
     socket.emit("setup", userData);
     socket.on("connected", () => {
@@ -30,8 +29,10 @@ const MessagesArea = () => {
 
     socket.on("message received", (newMessageStatus) => {
       console.log("Received message:", newMessageStatus);
-      setAllMessages([...messages, newMessageStatus]);
-  });
+      if (newMessageStatus.chatId === chat_id) {
+        setAllMessages((prevMessages) => [...prevMessages, newMessageStatus]);
+      }
+    });
 
     socket.on("error", (error) => {
       console.error('Socket.IO error:', error);
@@ -42,21 +43,21 @@ const MessagesArea = () => {
       socket.off("message received");
       socket.off("error");
     };
-  }, [userData]);
+  }, [userData,chat_id,socket]);
 
   useEffect(() => {
     console.log("Users refreshed");
     console.log("Chat ID:", chat_id);
     console.log("User Token:", userData.data.token);
-
+  
     const config = {
       headers: {
         Authorization: `Bearer ${userData.data.token}`,
       },
     };
-
+  
     axios
-      .get("http://localhost:5000/message/" + chat_id, config)
+      .get("https://chatify-backend-1w3m.onrender.com/message/" + chat_id, config)
       .then((response) => {
         console.log("Rendered Response:", response.data);
         setAllMessages(response.data);
@@ -65,7 +66,8 @@ const MessagesArea = () => {
       .catch((error) => {
         console.error("Error fetching messages:", error);
       });
-  }, [refresh, chat_id, userData.data.token]);
+  }, [refresh, chat_id, userData.data.token,socket]);
+  
 
   const sendMessage = useCallback( async () => {
     const config = {
@@ -76,7 +78,7 @@ const MessagesArea = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/message/",
+        "https://chatify-backend-1w3m.onrender.com/message/",
         {
           content: messageContent,
           chatId: chat_id,
@@ -91,7 +93,7 @@ const MessagesArea = () => {
     } catch (error) {
       console.error("Error sending message:", error);
     }
-  },[userData, messageContent, chat_id, setRefresh, socket]);
+  },[userData, messageContent, chat_id, setRefresh, socket,refresh]);
 
 
   //delete the chat 
@@ -104,7 +106,7 @@ const MessagesArea = () => {
       };
   
   
-      axios.delete(`http://localhost:5000/message/${chat_id}`,config)
+      axios.delete(`https://chatify-backend-1w3m.onrender.com/message/${chat_id}`,config)
       // navigate("welcome")
     } catch (error) {
       console.log("getting error",error)

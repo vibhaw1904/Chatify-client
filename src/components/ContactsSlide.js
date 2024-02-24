@@ -3,25 +3,30 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import DarkModeIcon from "@mui/icons-material/DarkMode";
 import SearchIcon from "@mui/icons-material/Search";
 import "./temp.css";
+import LogoutIcon from '@mui/icons-material/Logout';
 import { IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { myContext } from "./Container";
 import axios from "axios";
-
 const ContactsSlide = () => {
+  
   const userData = JSON.parse(localStorage.getItem("userData"));
   const { refresh, setRefresh } = useContext(myContext);
   const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
-  const user = userData?.data; // Ensure userData is defined before accessing data
+  const user = userData?.data;
+  const [query,setQuery]=useState("")
 
+  const filteredMessages = messages.filter((conversation) =>
+    conversation.chatName.toLowerCase().includes(query.toLowerCase())
+  );
+  
   useEffect(() => {
     const fetchMessage = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/chat/', {
+        const response = await axios.get('https://chatify-backend-1w3m.onrender.com/chat/', {
           headers: {
             Authorization: `Bearer ${user?.token}`
           }
@@ -44,6 +49,11 @@ const ContactsSlide = () => {
   
   }, [refresh, user?.token]); 
 
+  const logout=()=>{
+    localStorage.removeItem('User Token');
+    localStorage.removeItem('users');
+    navigate('/')
+  }
   return (
     <div className="contactSlide-container">
       <div className="headers">
@@ -62,21 +72,21 @@ const ContactsSlide = () => {
           <IconButton onClick={() => navigate("Available-groups")}>
             <AddCircleIcon />
           </IconButton>{" "}
-          <IconButton>
-            <DarkModeIcon />
+          <IconButton onClick={logout}>
+            <LogoutIcon />
           </IconButton>
         </div>
       </div>
       <div className="Search">
-        <IconButton>
+        <IconButton >
           {" "}
           <SearchIcon />
         </IconButton>
-        <input type="text" placeholder="search..." />
+        <input type="text" placeholder="search..." value={query}   onChange={(e) => setQuery(e.target.value)}/>
       </div>
       <div className="contacts">
-        {messages.length > 0 ? (
-          messages.map((conversation, index) => {
+        {filteredMessages.length > 0 ? (
+          filteredMessages.map((conversation, index) => {
             var chatName = "";
 
             if (conversation.isGroupChat) {

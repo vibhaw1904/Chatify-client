@@ -24,7 +24,7 @@ const Login = () => {
 
        await new Promise((resolve) => setTimeout(resolve, 2000));
        try {
-        const res= await axios.post('http://localhost:5000/user/login',{email,password},{
+        const res= await axios.post('https://chatify-backend-1w3m.onrender.com/user/login',{email,password},{
         headers:{
             'Content-Type':'application/json'
         }

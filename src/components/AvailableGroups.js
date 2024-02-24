@@ -22,7 +22,7 @@ function AvailableGroups() {
   useEffect(() => {
     const fetchGroups = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/chat/fetchGroup", {
+        const res = await axios.get("url/chat/fetchGroup", {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
@@ -91,7 +91,7 @@ function AvailableGroups() {
                     },
                   };
                   axios.put(
-                    "http://localhost:8080/chat/addSelfToGroup",
+                    "https://chatify-backend-1w3m.onrender.com/chat/addSelfToGroup",
                     {
                       chatId:group._id,
                       userId: user._id,

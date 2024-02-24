@@ -7,13 +7,14 @@ import { AnimatePresence,motion } from 'framer-motion';
 import { useEffect,useState } from 'react';
 import axios from 'axios';
 const UserGroups = () => {
+  
   const navigate=useNavigate();
    const userData = JSON.parse(localStorage.getItem("userData"));
   const user=userData.data
   const [users,setUsers]=useState([]);
 
 useEffect(()=>{
-  axios.get('http://localhost:5000/user/fetchUsers',{
+  axios.get('https://chatify-backend-1w3m.onrender.com/user/fetchUsers',{
     headers:{
       Authorization:`Bearer ${user.token}`
     }
@@ -37,7 +38,7 @@ useEffect(()=>{
       >
    
       <div className='ug-header'>
-        <p>Online Users</p>
+        <p>Available Users</p>
       </div>
       <div className='sb-search'>
         <IconButton>
@@ -63,7 +64,7 @@ useEffect(()=>{
                 },
               };
               axios.post(
-                "http://localhost:5000/chat/",
+                "https://chatify-backend-1w3m.onrender.com/chat/",
                 {
                   userId: ele._id,
                 },

@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Groups() {
+
   // const lightTheme = useSelector((state) => state.themeKey);
   const userData = JSON.parse(localStorage.getItem("userData"));
   // console.log("Data from LocalStorage : ", userData);
@@ -42,7 +43,7 @@ function Groups() {
   // console.log("User Data from CreateGroups : ", userData);
 
   const createGroup = () => {
-    const res= axios.post("http://localhost:5000/chat/createGroup",{
+    const res= axios.post("https://chatify-backend-1w3m.onrender.com/chat/createGroup",{
       name:groupName,
       users:['65880448a683d893a084a9aa','65b8e2b471906e9cdff6d57b']
     },{

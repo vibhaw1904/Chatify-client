@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Backdrop,CircularProgress } from '@mui/material';
 const Signup = () => {
+
     const[username,setUsername]=useState('');
     const[email,setEmail]=useState('');
     const[password,setPassword]=useState('');
@@ -16,7 +17,7 @@ const Signup = () => {
       e.preventDefault();
       await new Promise((resolve) => setTimeout(resolve, 2000));
         try {
-        const res=await axios.post('http://localhost:5000/user/register',{username,email,password})
+        const res=await axios.post('https://chatify-backend-1w3m.onrender.com/user/register',{username,email,password})
         console.log(res.data)
         localStorage.setItem('userData',JSON.stringify(res));
         navigate('/')
